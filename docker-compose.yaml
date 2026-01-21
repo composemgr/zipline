@@ -1,0 +1,55 @@
+# nginx proxy address - http://172.17.0.1:3007
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "5m"
+    max-file: "1"
+
+services:
+  zipline:
+    image: ghcr.io/diced/zipline:latest
+    container_name: zipline-app
+    restart: unless-stopped
+    logging: *default-logging
+    networks:
+      - zipline
+    ports:
+      - "3007:3000"
+    environment:
+      TZ: ${TZ:-America/New_York}
+      DATABASE_URL: postgres://${DB_USER_NAME:-zipline}:${DB_USER_PASS:-changeme_db_password}@zipline-db:5432/${DB_CREATE_DATABASE_NAME:-zipline}
+    volumes:
+      - ./rootfs/data/zipline:/data
+      - ./rootfs/config/zipline:/config
+    depends_on:
+      - zipline-db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  zipline-db:
+    image: postgres:16-alpine
+    container_name: zipline-db
+    restart: unless-stopped
+    logging: *default-logging
+    networks:
+      - zipline
+    environment:
+      TZ: ${TZ:-America/New_York}
+      POSTGRES_DB: ${DB_CREATE_DATABASE_NAME:-zipline}
+      POSTGRES_USER: ${DB_USER_NAME:-zipline}
+      POSTGRES_PASSWORD: ${DB_USER_PASS:-changeme_db_password}
+    volumes:
+      - ./rootfs/db/postgres/zipline:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  zipline:
+    external: false
