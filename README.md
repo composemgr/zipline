@@ -51,9 +51,9 @@ See `docker-compose.yaml` for complete list of configurable options.
 
 ## 📂 Volumes
 
-- `./rootfs/data/zipline` - Data storage
-- `./rootfs/config/zipline` - Data storage
-- `./rootfs/data/db/postgres/zipline` - Data storage
+- `./volumes/data/zipline` - Data storage
+- `./volumes/config/zipline` - Data storage
+- `./volumes/data/db/postgres/zipline` - Data storage
 
 ## 🔐 Security
 
