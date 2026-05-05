@@ -20,8 +20,8 @@ services:
       TZ: ${TZ:-America/New_York}
       DATABASE_URL: postgres://${DB_USER_NAME:-zipline}:${DB_USER_PASS:-changeme_db_password}@zipline-db:5432/${DB_CREATE_DATABASE_NAME:-zipline}
     volumes:
-      - ./rootfs/data/zipline:/data
-      - ./rootfs/config/zipline:/config
+      - ./volumes/data/zipline:/data
+      - ./volumes/config/zipline:/config
     depends_on:
       - zipline-db
     healthcheck:
@@ -43,7 +43,7 @@ services:
       POSTGRES_USER: ${DB_USER_NAME:-zipline}
       POSTGRES_PASSWORD: ${DB_USER_PASS:-changeme_db_password}
     volumes:
-      - ./rootfs/data/db/postgres/zipline:/var/lib/postgresql/data
+      - ./volumes/data/db/postgres/zipline:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 30s
