@@ -29,7 +29,7 @@ services:
       CORE_SECRET: ${APP_SECRET_KEY:-changeme_secret_key_min_32_chars}
       CORE_HOST: 0.0.0.0
       CORE_PORT: 3000
-      WEBSITE_TITLE: ${APP_NAME:-Zipline}
+      WEBSITE_TITLE: ${APP_ORG_NAME:-Zipline}
     volumes:
       - ./volumes/data/zipline:/zipline/uploads
       - ./volumes/config/zipline:/zipline/public
