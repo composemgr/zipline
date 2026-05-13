@@ -27,12 +27,12 @@ services:
       HOSTNAME: ${BASE_HOST_NAME:-$HOSTNAME}
       DATABASE_URL: postgres://${DB_USER_NAME:-zipline}:${DB_USER_PASS:-changeme_db_password}@zipline-db:5432/${DB_CREATE_DATABASE_NAME:-zipline}
       CORE_SECRET: ${APP_SECRET_KEY:-changeme_secret_key_min_32_chars}
-      CORE_HOST: 0.0.0.0
+      CORE_HOSTNAME: 0.0.0.0
       CORE_PORT: 3000
-      WEBSITE_TITLE: ${APP_ORG_NAME:-Zipline}
     volumes:
-      - ./volumes/data/zipline:/zipline/uploads
-      - ./volumes/config/zipline:/zipline/public
+      - ./volumes/data/zipline/uploads:/zipline/uploads
+      - ./volumes/data/zipline/public:/zipline/public
+      - ./volumes/data/zipline/themes:/zipline/themes
     depends_on:
       zipline-db:
         condition: service_healthy
